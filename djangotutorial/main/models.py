@@ -31,12 +31,32 @@ class Movie(models.Model):
         verbose_name_plural = 'Фильмы'
 
 
+class Cinema(models.Model):
+    code = models.CharField('Код кинотеатра', max_length=20, unique=True)
+    city = models.CharField('Город', max_length=100)
+    address = models.CharField('Адрес', max_length=255)
+
+    def __str__(self):
+        return f"{self.city} – {self.address}"
+
+    class Meta:
+        verbose_name = 'Кинотеатр'
+        verbose_name_plural = 'Кинотеатры'
+
 class Showtime(models.Model):
-    code       = models.CharField('Код сеанса', max_length=20, unique=True)
-    movie      = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='showtimes')
-    hall       = models.ForeignKey(Hall,  on_delete=models.CASCADE, related_name='showtimes')
+    code = models.CharField('Код сеанса', max_length=20, unique=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='showtimes')
+    hall = models.ForeignKey(Hall, on_delete=models.CASCADE, related_name='showtimes')
+    cinema = models.ForeignKey(  # Добавьте это поле
+        Cinema,
+        verbose_name='Кинотеатр',
+        on_delete=models.CASCADE,
+        related_name='showtimes',
+        null=True  # Временно разрешите null для миграции
+    )
     start_time = models.DateTimeField('Начало')
-    end_time   = models.DateTimeField('Окончание')
+    end_time = models.DateTimeField('Окончание')
+    available_seats = models.JSONField('Доступные места', default=list)
 
     def __str__(self):
         return f'{self.code} – {self.movie.title} @ {self.start_time:%d.%m %H:%M}'
@@ -52,6 +72,8 @@ class Ticket(models.Model):
     user      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tickets')
     price     = models.DecimalField('Стоимость', max_digits=8, decimal_places=2)
     seat      = models.CharField('Место', max_length=10)
+    is_booked = models.BooleanField('Забронирован', default=True)
+    booking_date = models.DateTimeField('Дата брони', auto_now_add=True)
 
     def __str__(self):
         return f'Билет {self.code} – {self.showtime}'
