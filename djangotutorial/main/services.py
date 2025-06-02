@@ -1,4 +1,4 @@
-# main/services.py
+
 from .models import Hall, Movie, Cinema, Showtime, Ticket
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib.auth import get_user_model
@@ -191,12 +191,12 @@ class ShowtimeService:
         if not showtime:
             return []
 
-        # Получаем занятые места
+
         booked_seats = Ticket.objects.filter(
             showtime=showtime
         ).values_list('seat', flat=True)
 
-        # Фильтруем доступные места
+
         return [seat for seat in showtime.available_seats if seat not in booked_seats]
 
     @staticmethod
@@ -324,10 +324,10 @@ class TicketService:
 
             user = User.objects.get(id=user_id) if user_id else None
 
-            # Автоматическая генерация уникального кода
+
             code = f"T-{uuid.uuid4().hex[:6].upper()}"
 
-            # Проверка доступности места
+
             existing_ticket = Ticket.objects.filter(
                 showtime=showtime,
                 seat=seat
@@ -340,7 +340,7 @@ class TicketService:
                 code=code,
                 showtime=showtime,
                 user=user,
-                price=0,  # Бесплатное бронирование
+                price=0,
                 seat=seat,
                 is_booked=True
             )
@@ -410,10 +410,8 @@ class TicketService:
 
         user = User.objects.get(id=user_id) if user_id else None
 
-        # Автоматическая генерация уникального кода
         code = f"TICKET-{uuid.uuid4().hex[:8].upper()}"
 
-        # Проверка доступности места
         existing_ticket = Ticket.objects.filter(
             showtime=showtime,
             seat=seat
@@ -423,7 +421,7 @@ class TicketService:
             raise ValidationError(f"Место {seat} уже занято")
 
         return Ticket.objects.create(
-            code=code,  # Используем сгенерированный код
+            code=code,
             showtime=showtime,
             user=user,
             price=price,

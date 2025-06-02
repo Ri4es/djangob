@@ -7,7 +7,7 @@ class TicketSerializer(serializers.ModelSerializer):
         model = Ticket
         fields = ['id', 'code', 'showtime', 'price', 'seat']
         extra_kwargs = {
-            'code': {'read_only': True},  # Код генерируется автоматически
+            'code': {'read_only': True},
             'showtime': {'required': True},
             'seat': {'required': True}
         }

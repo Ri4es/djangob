@@ -26,14 +26,14 @@ class CinemaAdmin(admin.ModelAdmin):
 class ShowtimeAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         try:
-            if change:  # Обновление существующего объекта
+            if change:
                 updates = {}
                 for field in ['code', 'movie', 'hall', 'cinema', 'start_time']:
                     if field in form.changed_data:
                         updates[field] = getattr(obj, field)
 
                 ShowtimeService.update_showtime(obj.id, **updates)
-            else:  # Создание нового объекта
+            else:
                 ShowtimeService.create_showtime(
                     code=obj.code,
                     movie_id=obj.movie.id,

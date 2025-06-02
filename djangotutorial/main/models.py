@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-# Create your models here.
 class Hall(models.Model):
     code = models.CharField('Код зала', max_length=20, unique=True)
     name = models.CharField('Название', max_length=100)
@@ -47,12 +46,12 @@ class Showtime(models.Model):
     code = models.CharField('Код сеанса', max_length=20, unique=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='showtimes')
     hall = models.ForeignKey(Hall, on_delete=models.CASCADE, related_name='showtimes')
-    cinema = models.ForeignKey(  # Добавьте это поле
+    cinema = models.ForeignKey(
         Cinema,
         verbose_name='Кинотеатр',
         on_delete=models.CASCADE,
         related_name='showtimes',
-        null=True  # Временно разрешите null для миграции
+        null=True
     )
     start_time = models.DateTimeField('Начало')
     end_time = models.DateTimeField('Окончание')

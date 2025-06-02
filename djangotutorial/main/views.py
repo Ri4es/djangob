@@ -8,7 +8,6 @@ from .forms import BookingForm
 
 
 def index(request):
-    # Показываем последние фильмы и сеансы
     movies = Movie.objects.order_by('-release_date')[:5]
     now = timezone.now()
     upcoming_showtimes = Showtime.objects.filter(
@@ -49,7 +48,6 @@ def showtime_list(request):
         start_time__gte=now
     ).order_by('start_time').select_related('movie', 'cinema', 'hall')
 
-    # Группировка по дате
     showtimes_by_date = {}
     for showtime in showtimes:
         date = showtime.start_time.date()
@@ -68,7 +66,6 @@ def showtime_detail(request, showtime_id):
         id=showtime_id
     )
 
-    # Инициализация мест при первом открытии
     if not showtime.available_seats:
         seats = [f"{row}{num}" for row in "ABCDEFGH" for num in range(1, 21)]
         ShowtimeService.init_seats(showtime.id, seats)
@@ -91,7 +88,6 @@ def book_ticket(request, showtime_id):
             seat = form.cleaned_data['seat']
 
             try:
-                # Бронируем билет
                 ticket = TicketService.book_ticket(
                     showtime_id=showtime.id,
                     user_id=request.user.id,
@@ -111,7 +107,6 @@ def book_ticket(request, showtime_id):
 
 @login_required
 def my_tickets(request):
-    # Показываем билеты текущего пользователя
     tickets = Ticket.objects.filter(user=request.user).select_related(
         'showtime__movie', 'showtime__cinema', 'showtime__hall'
     ).order_by('-booking_date')
