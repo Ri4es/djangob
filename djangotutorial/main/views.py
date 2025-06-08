@@ -3,7 +3,6 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Movie, Showtime, Ticket, Cinema
-from .services import ShowtimeService, TicketService
 from .forms import BookingForm
 
 

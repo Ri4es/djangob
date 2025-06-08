@@ -1,8 +1,11 @@
 from django.contrib import admin
-
 from .models import Hall, Movie, Showtime, Ticket, Cinema
-from .services import ShowtimeService
 from django.core.exceptions import ValidationError
+
+class TicketAdmin(admin.ModelAdmin):
+    exclude = ('available_seats',)  # Исключаем поле из админки
+    # или
+    readonly_fields = ('available_seats',)  # Делаем поле только для чтения
 
 
 @admin.register(Hall)

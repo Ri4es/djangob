@@ -1,10 +1,7 @@
 from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
-from .api import TicketViewSet
 
-router = DefaultRouter()
-router.register(r'tickets', TicketViewSet, basename='ticket')
 
 urlpatterns = [
     path('', views.index ),
@@ -16,5 +13,4 @@ urlpatterns = [
     path('book-ticket/<int:showtime_id>/', views.book_ticket, name='book_ticket'),
     path('my-tickets/', views.my_tickets, name='my_tickets'),
     path('ticket/<int:ticket_id>/', views.ticket_detail, name='ticket_detail'),
-path('api/', include(router.urls)),
 ]
