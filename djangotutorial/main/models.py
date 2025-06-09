@@ -9,7 +9,6 @@ import uuid
 User = get_user_model()
 
 
-# Кастомный менеджер для Hall
 class HallManager(models.Manager):
     def create_hall(self, code: str, name: str) -> 'Hall':
         return self.create(code=code, name=name)
@@ -46,7 +45,6 @@ class Hall(models.Model):
         verbose_name_plural = 'Залы'
 
 
-# Кастомный менеджер для Movie
 class MovieManager(models.Manager):
     def create_movie(self, code: str, title: str, **kwargs) -> 'Movie':
         return self.create(code=code, title=title, **kwargs)
@@ -91,7 +89,6 @@ class Movie(models.Model):
         verbose_name_plural = 'Фильмы'
 
 
-# Кастомный менеджер для Cinema
 class CinemaManager(models.Manager):
     def create_cinema(self, code: str, city: str, address: str) -> 'Cinema':
         return self.create(code=code, city=city, address=address)
@@ -132,7 +129,7 @@ class Cinema(models.Model):
         verbose_name_plural = 'Кинотеатры'
 
 
-# Кастомный менеджер для Showtime
+
 class ShowtimeManager(models.Manager):
     @transaction.atomic
     def create_showtime(
