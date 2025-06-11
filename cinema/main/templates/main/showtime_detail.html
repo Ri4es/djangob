@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header">
+        <h2>{{ showtime.movie.title }}</h2>
+    </div>
+    <div class="card-body">
+        <p><strong>Дата и время:</strong> {{ showtime.start_time|date:"d.m.Y H:i" }}</p>
+        <p><strong>Кинотеатр:</strong> {{ showtime.cinema }}</p>
+        <p><strong>Зал:</strong> {{ showtime.hall.name }}</p>
+        <p><strong>Длительность:</strong> {{ showtime.movie.duration }} мин.</p>
+        <p><strong>Описание:</strong> {{ showtime.movie.description }}</p>
+    </div>
+</div>
+
+{% if error %}
+<div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header">
+        <h3>Выбор места</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.seat.label_tag }}
+                {{ form.seat }}
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Забронировать место</button>
+        </form>
+
+        <div class="mt-4">
+            <h4>Схема зала</h4>
+            <div class="cinema-hall">
+                <div class="screen">ЭКРАН</div>
+                <div class="seats-grid">
+                    {% for row in "ABCDEFGH" %}
+                    <div class="seat-row">
+                        {% for num in "1234567891011121314151617181920"|make_list %}
+                        {% with seat=row|add:num %}
+                        <div class="seat {% if seat not in showtime.available_seats %}seat-unavailable{% endif %}">
+                            {{ seat }}
+                        </div>
+                        {% endwith %}
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

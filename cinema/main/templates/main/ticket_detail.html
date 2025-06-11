@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h2>Ваш билет №{{ ticket.code }}</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h4>{{ ticket.showtime.movie.title }}</h4>
+                <p><strong>Дата и время:</strong> {{ ticket.showtime.start_time|date:"d.m.Y H:i" }}</p>
+                <p><strong>Кинотеатр:</strong> {{ ticket.showtime.cinema }}</p>
+                <p><strong>Зал:</strong> {{ ticket.showtime.hall.name }}</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="ticket-info">
+                    <p class="display-4">Место: {{ ticket.seat }}</p>
+                    <p class="fs-5">Ряд: {{ ticket.seat.0 }}</p>
+                    <p class="fs-5">Место: {{ ticket.seat|slice:"1:" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <p class="mb-0">Билет забронирован: {{ ticket.booking_date|date:"d.m.Y H:i" }}</p>
+        <p class="mb-0">Предъявите этот билет при входе в кинотеатр</p>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a href="{% url 'my_tickets' %}" class="btn btn-outline-primary">
+        К списку моих билетов
+    </a>
+    <a href="{% url 'index' %}" class="btn btn-primary">
+        На главную
+    </a>
+</div>
+{% endblock %}
